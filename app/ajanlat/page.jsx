@@ -1,5 +1,6 @@
 import OfferButton from "../../components/OfferButton";
 import InitialScrollToPolyphenols from "../../components/InitialScrollToPolyphenols";
+import ScratchCouponPopup from "../../components/ScratchCouponPopup";
 
 const PRODUCT_IMAGE = "/images/vge-dupla-csomag.webp";
 const DETAIL_IMAGE = "https://raw.githubusercontent.com/lenkei/vitalgrape-web/main/public/images/products/vge/gallery-1.webp";
@@ -32,6 +33,7 @@ export default function OfferPage() {
   return (
     <>
       <InitialScrollToPolyphenols />
+      <ScratchCouponPopup />
       <div className="announcement">VITAL GRAPE ESSENCE <span>◆</span> A TERMÉSZET ESSZENCIÁJA</div>
       <header className="main-nav">
         <a className="wordmark" href="#top" aria-label="Vital Grape Essence kezdőlap"><span>V·G·E</span><small>VITAL GRAPE ESSENCE</small></a>
