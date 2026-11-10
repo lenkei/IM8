@@ -18,7 +18,7 @@ npm run dev
 
 A dupla csomag kommunikált ára 49 000 Ft, két darab 500 ml-es üveggel; a címke szerinti 40 ml-es napi adag alapján összesen 25 napi adag. A GLS-szállításra a megerősített ingyenes ajánlat vonatkozik; a Magyar Posta a webshop jelenlegi szabályai szerint ettől eltérhet.
 
-Az oldalon használt termékképek a `lenkei/vitalgrape-web` publikus, GitHub-on tárolt termékfotói. A végleges kreatívokat publikálás előtt célszerű áthelyezni az IM8 saját `public/` könyvtárába, különösen a dupla csomagos, korábban jóváhagyott reklámképet.
+A kiemelt dupla csomagos nyitókép már az IM8 saját `public/images/vge-dupla-csomag.webp` fájljában található (a korábban feltöltött, azonos nevű eredeti VGE csomagképből). A többi illusztráció továbbra is a `lenkei/vitalgrape-web` nyilvános termékképeire hivatkozik.
 
 ## Fontos: kosár- és checkout-integráció MÉG NEM KÉSZ
 
