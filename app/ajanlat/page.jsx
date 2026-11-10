@@ -1,6 +1,6 @@
 import OfferButton from "../../components/OfferButton";
 
-const PRODUCT_IMAGE = "https://raw.githubusercontent.com/lenkei/vitalgrape-web/main/public/images/products/vge/campaign-hero.webp";
+const PRODUCT_IMAGE = "/images/vge-dupla-csomag.webp";
 const DETAIL_IMAGE = "https://raw.githubusercontent.com/lenkei/vitalgrape-web/main/public/images/products/vge/gallery-1.webp";
 const LIFESTYLE_IMAGE = "https://raw.githubusercontent.com/lenkei/vitalgrape-web/main/public/images/products/vge/gallery-2.webp";
 
@@ -53,7 +53,7 @@ export default function OfferPage() {
           <div className="feature-visual">
             <div className="visual-frame">
               <span className="visual-topline">VITAL GRAPE ESSENCE · ROSA CANINA</span>
-              <img src={PRODUCT_IMAGE} alt="Vital Grape Essence prémium termékfotó" />
+              <img src={PRODUCT_IMAGE} alt="Vital Grape Essence dupla csomag: két eredeti palack és fekete díszdoboz" />
               <div className="visual-bottom"><span>DUO · 2 ÜVEG</span><span>PRÉMIUM VÁLASZTÁS</span></div>
             </div>
             <div className="feature-stamp">DUO<br/><small>AJÁNLAT</small></div>
