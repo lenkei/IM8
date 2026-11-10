@@ -2,15 +2,14 @@
 
 import { useEffect, useRef, useState } from "react";
 
-// Csak akkor aktiváljuk az éles felugró ablakot, ha a webshop adminjában
-// MÁR létrehozott, valóban beváltható 11%-os kuponkód van beállítva Vercelen.
-const CONFIGURED_CODE = (process.env.NEXT_PUBLIC_VGE_SCRATCH_COUPON_CODE ?? "").trim().toUpperCase();
-const ACTIVE_COUPON = /^[A-Z0-9][A-Z0-9_-]{3,31}$/.test(CONFIGURED_CODE) ? CONFIGURED_CODE : "";
+// A webshopban létrehozott 11%-os kupon; nincs szükség Vercel env beállításra.
+// A publikus kuponkód nem titkos adat. A kedvezmény érvényességét a webshop
+// szerveroldali kuponellenőrzése dönti el, nem ez a komponens.
+const ACTIVE_COUPON = "CSOPORT11";
 const PRODUCT_URL =
   process.env.NEXT_PUBLIC_VGE_PRODUCT_URL ||
   "https://uj.vitalgrapeessence.hu/termekek/vital-grape-essence";
 const DELAY_MS = 60_000;
-const SESSION_SHOWN_KEY = "vge-scratch-coupon-shown-v1";
 
 function ScratchSurface({ revealed, onReveal }) {
   const canvasRef = useRef(null);
@@ -154,32 +153,22 @@ export default function ScratchCouponPopup() {
   const reopenRef = useRef(null);
 
   useEffect(() => {
-    if (!ACTIVE_COUPON) return undefined;
-
-    try {
-      if (window.sessionStorage.getItem(SESSION_SHOWN_KEY) === "yes") {
-        setAvailable(true);
-        return undefined;
-      }
-    } catch {
-      // Privát böngészési módban a sessionStorage elérhetetlen lehet.
-    }
-
-    let expired = false;
+    // Minden új oldalbetöltés saját 60 másodperces időzítőt indít.
+    // Előző megnyitások nem blokkolják a felugró ablakot.
+    let elapsed = false;
+    let displayed = false;
     const showWhenVisible = () => {
-      if (!expired || document.visibilityState === "hidden") return;
+      if (!elapsed || displayed || document.visibilityState === "hidden") return;
+      displayed = true;
       setAvailable(true);
       setOpen(true);
-      try {
-        window.sessionStorage.setItem(SESSION_SHOWN_KEY, "yes");
-      } catch {
-        // A megjelenítést ez nem akadályozza meg.
-      }
     };
     const timer = window.setTimeout(() => {
-      expired = true;
+      elapsed = true;
       showWhenVisible();
     }, DELAY_MS);
+    // Rejtett böngészőfülön nem szakítjuk meg a látogatót; a visszatéréskor
+    // azonnal felajánljuk a kedvezményt, ha a 60 másodperc már eltelt.
     document.addEventListener("visibilitychange", showWhenVisible);
     return () => {
       window.clearTimeout(timer);
@@ -283,6 +272,7 @@ export default function ScratchCouponPopup() {
             <p className="scratch-transparency">
               A kaparás játékos megjelenítés: minden résztvevő ugyanazt a 11%-os kedvezményt kapja, nem sorsolás.
             </p>
+            <div className="scratch-curtain-hem" aria-hidden="true" />
           </section>
         </div>
       )}
