@@ -52,18 +52,14 @@ A tervezett cím: `https://vitalgrapeessence.hu/ajanlat`. A repóban lévő fáj
 Ez fejlesztői változat, nem élesített oldal vagy kész fizetési integráció.
 
 
-## Kaparós 11%-os kupon – 60 másodperces felugró ablak
+## Kaparós 11%-os kupon – automatikus megjelenés 60 másodperc után
 
-A `components/ScratchCouponPopup.jsx` modul a `/ajanlat` landingoldal betöltésétől számított **60 másodperc** után jelenik meg. A kaparó felület HTML Canvas: érintéssel, egérrel és tollal is működik. Körülbelül 35%-os lekaparás után teljesen felfedi a 11%-os kuponajánlatot. A kupon másolható, és a termékoldalra vezető gomb az összes egyszeri VGE csomag elérésére szolgál. Az ablak bezárható; a munkamenetben egyszer jelenik meg automatikusan, majd a jobb alsó sarokból újranyitható. Rejtett böngészőfülnél csak visszatéréskor bukkan fel. Billentyűzettel egy külön „kedvezmény megjelenítése kaparás nélkül” gomb is rendelkezésre áll.
+A `components/ScratchCouponPopup.jsx` modul a `/ajanlat` landingoldal **minden új megnyitásától számított 60 másodperc** után felugrik. A korábbi változatban a popup tévesen nem jelent meg, ha a `NEXT_PUBLIC_VGE_SCRATCH_COUPON_CODE` Vercel-környezeti változó hiányzott, illetve ha az adott munkamenetben már egyszer megnyílt. Ezeket a korlátokat megszüntettük.
 
-**Kritikus aktiválási feltétel – a kód nincs még létrehozva vagy igazolva:**
+**Kupon:** `CSOPORT11` — a webshophoz a felhasználó által megerősített, létező 11%-os kód. A kód a kliensben szándékosan publikus, és **nem** igényel környezeti változót. Az igazi kedvezményt a webshop szerveroldali kuponellenőrzése érvényesíti. A kupon hatókörét (1/2/3/6 palackos egyszeri csomagok) a webshop adminjában kell fenntartani; előfizetésre a meglévő rendszer nem fogad el kuponokat.
 
-1. A **működő webshop adminban** (a `/admin/kuponok` oldalon) hozz létre egy egyedi, aktív **11%-os** kuponkódot, például `KAPAR11`. Az elnevezés csak javaslat, jelenleg **nem igazoltan létező kupon**.
-2. A kupon hatóköre az összes kívánt **egyszeri vásárlású** VGE-csomag ársora legyen (vagy scoped=false, ha valóban minden egyszeri termékre érvényes legyen). Ne legyen olyan minimum vagy lejárat, amely ellentmond a landing ígéretének. A jelenlegi webshop kuponlogikája előfizetést nem támogat.
-3. Tesztelj legalább egy egy-, két-, három- és hatpalackos kosarat a webshop pénztárában: a kedvezménynek mindenhol a végleges csomagár 11%-át kell jelentenie, és a server-side checkoutnak is elfogadnia.
-4. Ha minden működik, add hozzá az IM8 **Vercel Production** környezeti változóihoz `NEXT_PUBLIC_VGE_SCRATCH_COUPON_CODE=KAPAR11` (vagy a valós kód), majd indíts production újratelepítést, mert a `NEXT_PUBLIC_*` változók buildidőben épülnek be.
-5. **A változó hiányában a kaparós felugró nem jelenik meg**, így nem osztunk ki beválthatatlan kupont.
+**Animáció:** az ajánlati modál függönyként felülről leereszkedik, az alsó szegélye enyhén hullámzik, majd 1,8 másodperc alatt kisimul és nyugalomba kerül. A csökkentett animációt igénylő felhasználóknál azonnal, animáció nélkül jelenik meg. Telefonon ujjal, asztali gépen egérrel és érintőtollal kaparható. 35% lekaparása után teljesen felfedi a kódot. Képernyőolvasót és billentyűzetet használók számára azonnali felfedő gomb is elérhető.
 
-A felugró szövegezése nyíltan elmondja, hogy minden résztvevő ugyanezt az ajándékot kapja, nem véletlenszerű sorsolás. A „mai meglepetés” nem időbeli lejárati ígéret; ha a kupon valóban csak adott napon érvényes, a lejáratot az adminban kell beállítani és az érintett szabályzatban kommunikálni. A kedvezmény csak **egyszeri vásárlású csomagokra** ígért, mert a webshop előfizetésre nem enged kuponokat.
+Az ablak bezárható és a jobb alsó sarokban ismét megnyitható. A 60 másodperces időzítés **minden új oldalletöltésnél** újraindul; ha a lap nem látható, az eltelt idő után a következő láthatóvá váláskor jelenik meg. A kaparás játékos megjelenítés, minden résztvevő ugyanazt a 11%-os kedvezményt kapja: nem véletlenszerű sorsolás. A „mai nyeremény” reklámszöveg nem jelent automatikus aznapi lejáratot.
 
-**Mérés:** a megjelenés, kaparás és kuponbeváltás mérési eseményeit később a már működő webshop Meta/GA4 rendszerének megfelelően külön be lehet kötni. A canvas esemény és a tényleges kuponbeváltás nem azonos, ezért azokat nem szabad összevonni.
+**Éles beváltásellenőrzés:** az IM8 projekt csak megjeleníti és másolja a kódot; a webshop egy-, két-, három- és hatpalackos egyszeri csomagjainál külön ajánlott tesztelni a kupon 11%-os érvényesítését a pénztárban. A popup felfedése és a rendelés tényleges kedvezményének beváltása két külön esemény.
