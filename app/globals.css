@@ -297,3 +297,81 @@ button,a{touch-action:manipulation}
   .scratch-backdrop { align-items: flex-start; }
   .scratch-modal { max-height: calc(100dvh - 20px); }
 }
+
+
+/* A kaparós ablak függönyszerű leereszkedése:
+   felülről érkezik, az alsó széle 1.8 mp alatt megszűnik hullámozni. */
+.scratch-backdrop {
+  animation: scratch-curtain-backdrop 250ms ease-out both;
+}
+.scratch-modal {
+  transform-origin: 50% 0%;
+  will-change: transform, clip-path;
+  animation: scratch-curtain-descend 1800ms both;
+}
+.scratch-curtain-hem {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  height: 29px;
+  background: #4b071f;
+  pointer-events: none;
+  animation: scratch-curtain-hem-flutter 1800ms ease-out both;
+}
+@keyframes scratch-curtain-backdrop {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes scratch-curtain-descend {
+  0% {
+    transform: translate3d(0, -115vh, 0) rotate(-1.4deg) scaleY(.92);
+    clip-path: polygon(0 0, 100% 0, 100% 97%, 86% 100%, 71% 95%, 54% 99%, 34% 96%, 17% 100%, 0 97%);
+  }
+  48% {
+    transform: translate3d(0, 18px, 0) rotate(.7deg) scaleY(1.035);
+    clip-path: polygon(0 0, 100% 0, 100% 98%, 86% 95%, 71% 100%, 54% 97%, 34% 100%, 17% 96%, 0 99%);
+  }
+  69% {
+    transform: translate3d(0, -8px, 0) rotate(-.35deg) scaleY(.985);
+    clip-path: polygon(0 0, 100% 0, 100% 99%, 86% 100%, 71% 98%, 54% 100%, 34% 98%, 17% 100%, 0 99%);
+  }
+  85% {
+    transform: translate3d(0, 3px, 0) rotate(.12deg) scaleY(1.005);
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 86% 99%, 71% 100%, 54% 99%, 34% 100%, 17% 99%, 0 100%);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg) scaleY(1);
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 86% 100%, 71% 100%, 54% 100%, 34% 100%, 17% 100%, 0 100%);
+  }
+}
+@keyframes scratch-curtain-hem-flutter {
+  0% {
+    height: 29px;
+    clip-path: polygon(0 25%, 15% 0, 33% 42%, 51% 5%, 67% 48%, 83% 8%, 100% 38%, 100% 100%, 0 100%);
+    transform: rotate(-.8deg);
+  }
+  48% {
+    height: 22px;
+    clip-path: polygon(0 15%, 15% 46%, 33% 9%, 51% 48%, 67% 4%, 83% 41%, 100% 16%, 100% 100%, 0 100%);
+    transform: rotate(.7deg);
+  }
+  75% {
+    height: 12px;
+    clip-path: polygon(0 0, 15% 22%, 33% 0, 51% 25%, 67% 0, 83% 15%, 100% 0, 100% 100%, 0 100%);
+    transform: rotate(-.12deg);
+  }
+  100% {
+    height: 3px;
+    clip-path: polygon(0 0, 15% 0, 33% 0, 51% 0, 67% 0, 83% 0, 100% 0, 100% 100%, 0 100%);
+    transform: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .scratch-backdrop, .scratch-modal, .scratch-curtain-hem {
+    animation: none;
+  }
+  .scratch-modal { clip-path: none; transform: none; }
+  .scratch-curtain-hem { height: 3px; }
+}
